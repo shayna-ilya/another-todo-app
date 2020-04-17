@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import './App.css';
 import { TodoList } from './components/todo-list';
 
 const AppContainer = styled.div`
@@ -11,7 +10,6 @@ const AppContainer = styled.div`
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 `;
 
 const App = () => {
