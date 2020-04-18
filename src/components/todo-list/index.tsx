@@ -5,6 +5,9 @@ import { TodoItem } from '../todo-item';
 
 type Props = {
   todos: Todo[];
+  onAdd(todo: Todo): void;
+  onDelete(index: number): void;
+  onEdit(index: number, todo: Todo): void;
 };
 
 const Container = styled.div`
@@ -42,13 +45,20 @@ const TodosList = styled.ul`
   list-style: none;
 `;
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onAdd,
+  onDelete,
+  onEdit,
+}) => {
   const renderTodos = () => {
     return todos.map((todo, index) => {
       return (
         <TodoItem
-          handleCheckboxChange={() => null}
+          onEdit={onEdit}
+          onDelete={onDelete}
           data={todo}
+          index={index}
           key={String(index)}
         />
       );

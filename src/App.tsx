@@ -19,7 +19,12 @@ const App = () => {
 
   return (
     <AppContainer>
-      <TodoList todos={todos} />
+      <TodoList
+        todos={todos}
+        onAdd={addTodo}
+        onDelete={deleteTodo}
+        onEdit={editTodo}
+      />
     </AppContainer>
   );
 };
