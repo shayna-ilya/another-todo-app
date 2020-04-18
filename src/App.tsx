@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useTodoStorage } from './utils/todo-storage';
 import { TodoList } from './components/todo-list';
 import { Todo } from './types';
 
@@ -13,13 +14,9 @@ const AppContainer = styled.div`
   font-size: calc(10px + 2vmin);
 `;
 
-const todos: Todo[] = [
-  { title: 'lorem in', isCompleted: true },
-  { title: '2adsfasdf', isCompleted: false },
-  { title: 'asdfadsfasdfsadf 3', isCompleted: false },
-];
-
 const App = () => {
+  const { todos, addTodo, deleteTodo, editTodo } = useTodoStorage();
+
   return (
     <AppContainer>
       <TodoList todos={todos} />
