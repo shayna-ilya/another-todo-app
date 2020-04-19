@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTodoStorage } from './utils/todo-storage';
 import { TodoList } from './components/todo-list';
-import { Todo } from './types';
 
 const AppContainer = styled.div`
   background-color: #282c34;
@@ -17,10 +16,24 @@ const AppContainer = styled.div`
 const App = () => {
   const { todos, addTodo, deleteTodo, editTodo } = useTodoStorage();
 
+  const reversedOrderSortedTodos = React.useMemo(
+    () =>
+      [...todos].sort((a, b) => {
+        if (a.title.toLowerCase() > b.title.toLowerCase()) {
+          return -1;
+        }
+        if (a.title.toLowerCase() < b.title.toLowerCase()) {
+          return 1;
+        }
+        return 0;
+      }),
+    [todos]
+  );
+
   return (
     <AppContainer>
       <TodoList
-        todos={todos}
+        todos={reversedOrderSortedTodos}
         onAdd={addTodo}
         onDelete={deleteTodo}
         onEdit={editTodo}

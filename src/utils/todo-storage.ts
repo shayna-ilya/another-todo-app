@@ -2,12 +2,6 @@ import React from 'react';
 import * as uuid from 'uuid';
 import { Todo } from '../types';
 
-const todosInitialValue: Todo[] = [
-  { title: 'lorem in', isCompleted: true, id: uuid.v4() },
-  { title: '2adsfasdf', isCompleted: false, id: uuid.v4() },
-  { title: 'asdfadsfasdfsadf 3', isCompleted: false, id: uuid.v4() },
-];
-
 export const useTodoStorage = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
 
