@@ -27,6 +27,8 @@ const Task = styled.input<{ isCompleted: boolean }>`
   cursor: ${(props) => (props.isCompleted ? 'default' : 'text')};
 `;
 
+const ENTER_KEY_CODE = 13;
+
 export const TodoItem: React.FC<Props> = ({ todo, onEdit, onDelete }) => {
   const { isCompleted, title } = todo;
   const [taskValue, setTaskValue] = React.useState<string>(title);
@@ -51,7 +53,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onEdit, onDelete }) => {
 
   const handleEnterPress = React.useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.keyCode === 13) {
+      if (e.keyCode === ENTER_KEY_CODE) {
         saveTaskTitle();
       }
     },

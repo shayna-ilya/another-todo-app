@@ -59,7 +59,7 @@ const Footer = styled.div`
 `;
 
 const AddTodoInput = styled.input`
-  width: 20vh;
+  width: 20vw;
 `;
 
 export const TodoList: React.FC<Props> = ({
@@ -70,18 +70,15 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const [todoInputValue, setTodoInputValue] = React.useState<string>('');
 
-  const renderTodos = () => {
-    return todos.map((todo) => {
-      return (
-        <TodoItem
-          onEdit={onEdit}
-          onDelete={onDelete}
-          todo={todo}
-          key={todo.id}
-        />
-      );
-    });
-  };
+  const renderTodos = () =>
+    todos.map((todo) => (
+      <TodoItem
+        onEdit={onEdit}
+        onDelete={onDelete}
+        todo={todo}
+        key={todo.id}
+      />
+    ));
 
   const handleAddButtonPress = React.useCallback(() => {
     onAdd({ title: todoInputValue, isCompleted: false });
