@@ -1,10 +1,11 @@
 import React from 'react';
+import * as uuid from 'uuid';
 import { Todo } from '../types';
 
 const todosInitialValue: Todo[] = [
-  { title: 'lorem in', isCompleted: true },
-  { title: '2adsfasdf', isCompleted: false },
-  { title: 'asdfadsfasdfsadf 3', isCompleted: false },
+  { title: 'lorem in', isCompleted: true, id: uuid.v4() },
+  { title: '2adsfasdf', isCompleted: false, id: uuid.v4() },
+  { title: 'asdfadsfasdfsadf 3', isCompleted: false, id: uuid.v4() },
 ];
 
 export const useTodoStorage = () => {
@@ -21,13 +22,14 @@ export const useTodoStorage = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const addTodo = React.useCallback((todo: Todo) => {
-    setTodos((old) => [...old, todo]);
+  const addTodo = React.useCallback((todo: Omit<Todo, 'id'>) => {
+    setTodos((old) => [...old, { ...todo, id: uuid.v4() }]);
   }, []);
 
   const editTodo = React.useCallback(
-    (index: number, todo: Todo) => {
+    (todo: Todo) => {
       const draft = [...todos];
+      const index = draft.findIndex((item) => item.id === todo.id);
       draft[index] = todo;
       setTodos(draft);
     },
@@ -35,8 +37,9 @@ export const useTodoStorage = () => {
   );
 
   const deleteTodo = React.useCallback(
-    (index: number) => {
+    (todo: Todo) => {
       const draft = [...todos];
+      const index = draft.findIndex((item) => item.id === todo.id);
       draft.splice(index, 1);
       setTodos(draft);
     },

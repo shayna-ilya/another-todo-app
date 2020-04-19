@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Todo } from '../../types';
 
 type Props = {
-  data: Todo;
-  onEdit(index: number, todo: Todo): void;
-  onDelete(index: number): void;
-  index: number;
+  todo: Todo;
+  onEdit(todo: Todo): void;
+  onDelete(todo: Todo): void;
 };
 
 const Container = styled.li`
@@ -26,15 +27,15 @@ const Task = styled.input<{ isCompleted: boolean }>`
   cursor: ${(props) => (props.isCompleted ? 'default' : 'text')};
 `;
 
-export const TodoItem: React.FC<Props> = ({ data, onEdit, index }) => {
-  const { isCompleted, title } = data;
+export const TodoItem: React.FC<Props> = ({ todo, onEdit, onDelete }) => {
+  const { isCompleted, title } = todo;
   const [taskValue, setTaskValue] = React.useState<string>(title);
 
   const handleCheckboxChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      onEdit(index, { ...data, isCompleted: e.target.checked });
+      onEdit({ ...todo, isCompleted: e.target.checked });
     },
-    [onEdit, data, index]
+    [onEdit, todo]
   );
 
   const handleTaskChange = React.useCallback(
@@ -45,8 +46,8 @@ export const TodoItem: React.FC<Props> = ({ data, onEdit, index }) => {
   );
 
   const saveTaskTitle = React.useCallback(() => {
-    onEdit(index, { ...data, title: taskValue });
-  }, [index, data, onEdit, taskValue]);
+    onEdit({ ...todo, title: taskValue });
+  }, [todo, onEdit, taskValue]);
 
   const handleEnterPress = React.useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -56,6 +57,10 @@ export const TodoItem: React.FC<Props> = ({ data, onEdit, index }) => {
     },
     [saveTaskTitle]
   );
+
+  const handleRemoveButtonPress = React.useCallback(() => {
+    onDelete(todo);
+  }, [onDelete, todo]);
 
   return (
     <Container>
@@ -67,10 +72,10 @@ export const TodoItem: React.FC<Props> = ({ data, onEdit, index }) => {
         readOnly={isCompleted}
         onKeyDown={handleEnterPress}
       />
-      <Checkbox
-        checked={isCompleted}
-        onChange={handleCheckboxChange}
-      />
+      <Checkbox checked={isCompleted} onChange={handleCheckboxChange} />
+      <button onClick={handleRemoveButtonPress} type="button">
+        <FontAwesomeIcon icon={faTrash} size="xs" />
+      </button>
     </Container>
   );
 };

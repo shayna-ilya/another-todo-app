@@ -1,20 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Todo } from '../../types';
 import { TodoItem } from '../todo-item';
 
 type Props = {
   todos: Todo[];
-  onAdd(todo: Todo): void;
-  onDelete(index: number): void;
-  onEdit(index: number, todo: Todo): void;
+  onAdd(todo: Omit<Todo, 'id'>): void;
+  onDelete(todo: Todo): void;
+  onEdit(todo: Todo): void;
 };
 
 const Container = styled.div`
   background-color: #fff;
-  width: 1100px;
-  min-height: 80vh;
+  width: 800px;
+  min-height: 60vh;
   border-radius: 1vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 `;
 
 const Header = styled.div`
@@ -45,25 +50,49 @@ const TodosList = styled.ul`
   list-style: none;
 `;
 
+const Footer = styled.div`
+  margin-top: auto;
+  margin-bottom: 1vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AddTodoInput = styled.input`
+  width: 20vh;
+`;
+
 export const TodoList: React.FC<Props> = ({
   todos,
   onAdd,
   onDelete,
   onEdit,
 }) => {
+  const [todoInputValue, setTodoInputValue] = React.useState<string>('');
+
   const renderTodos = () => {
-    return todos.map((todo, index) => {
+    return todos.map((todo) => {
       return (
         <TodoItem
           onEdit={onEdit}
           onDelete={onDelete}
-          data={todo}
-          index={index}
-          key={String(index)}
+          todo={todo}
+          key={todo.id}
         />
       );
     });
   };
+
+  const handleAddButtonPress = React.useCallback(() => {
+    onAdd({ title: todoInputValue, isCompleted: false });
+    setTodoInputValue('');
+  }, [onAdd, todoInputValue]);
+
+  const handleAddTodoInputChange = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      setTodoInputValue(e.target.value),
+    []
+  );
 
   return (
     <Container>
@@ -74,6 +103,16 @@ export const TodoList: React.FC<Props> = ({
         <Title>To do List</Title>
         <TodosList>{renderTodos()}</TodosList>
       </Content>
+      <Footer>
+        <AddTodoInput
+          placeholder="add task..."
+          value={todoInputValue}
+          onChange={handleAddTodoInputChange}
+        />
+        <button onClick={handleAddButtonPress} type="button">
+          <FontAwesomeIcon icon={faPlus} size="xs" />
+        </button>
+      </Footer>
     </Container>
   );
 };
